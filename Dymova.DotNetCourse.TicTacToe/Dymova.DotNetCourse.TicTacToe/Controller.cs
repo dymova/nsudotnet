@@ -76,7 +76,7 @@ namespace Dymova.DotNetCourse.TicTacToe
         {
             foreach (var condition in WinConditions)
             {
-                if (ConditionIsTrue(_sectorsInfo, condition, 0, 0, _fieldStatus))
+                if (ConditionIsTrue(_sectorsInfo, condition, 0, 0, ref _fieldStatus))
                 {
                     return;
                 }
@@ -93,27 +93,29 @@ namespace Dymova.DotNetCourse.TicTacToe
         {
             var startSectorX = x/3*3;
             var startSectorY = y/3*3;
-            var sector = _sectorsInfo[x/3, y/3];
+            var sectorStatus = _sectorsInfo[x/3, y/3];
 
             foreach (var condition in WinConditions)
             {
-                if (ConditionIsTrue(Field, condition, startSectorX, startSectorY, sector))
+                if (ConditionIsTrue(Field, condition, startSectorX, startSectorY, ref sectorStatus))
                 {
+                    _sectorsInfo[x / 3, y / 3] = sectorStatus;
                     return;
                 }
             }
 
             if (IsFilled(startSectorX, startSectorY, Field))
             {
-                sector = Cell.Draw;
+                sectorStatus = Cell.Draw;
             }
         }
 
-        private static bool ConditionIsTrue(Cell[,] field, int[,] condition, int x, int y, Cell sector)
+        private static bool ConditionIsTrue(Cell[,] field, int[,] condition, int x, int y, ref Cell sector)
         {
             var firstCell = field[condition[0, 0] + x, condition[0, 1] + y];
             if (firstCell != Cell.O && firstCell != Cell.X)
             {
+
                 return false;
             }
 
