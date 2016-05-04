@@ -4,12 +4,47 @@ using System.Text;
 namespace Dymova.DotNetCourse.TicTacToe
 {
 
-    public class ConsoleInterface
+    public class ConsoleInterface : IUserInterface
     {
-        private const string symbolX = "x";
-        private const string symbolO = "o";
-        private const string symbolDraw = "d";
-        private const string symbolFree = " ";
+        private const string SymbolX = "x";
+
+        private const string SymbolO = "o";
+
+        private const string SymbolDraw = "d";
+
+        private const string SymbolFree = " ";
+
+        private readonly Game _game;
+
+        public ConsoleInterface(Game game)
+        {
+            _game = game;
+        }
+
+        public void Run()
+        {
+            DisplayField(_game.Field, _game.SectorsInfo);
+
+            while (_game.FieldStatus == Cell.Free)
+            {
+                try
+                {
+                    int y;
+                    int x;
+                    GetNextStep(out x, out y);
+                    _game.MakeMove(x, y);
+                    DisplayField(_game.Field, _game.SectorsInfo);
+                }
+                catch (Game.GameException e)
+                {
+                    DisplayError(e.Message);
+                }
+
+            }
+
+
+            DisplayResult(_game.FieldStatus);
+        }
 
         public static void DisplayHelp()
         {
@@ -31,13 +66,13 @@ namespace Dymova.DotNetCourse.TicTacToe
                     switch (field[line, position])
                     {
                         case Cell.X:
-                            sb.Append(symbolX);
+                            sb.Append(SymbolX);
                             break;
                         case Cell.O:
-                            sb.Append(symbolO);
+                            sb.Append(SymbolO);
                             break;
                         case Cell.Free:
-                            sb.Append(symbolFree);
+                            sb.Append(SymbolFree);
                             break;
 
                     }
@@ -68,16 +103,16 @@ namespace Dymova.DotNetCourse.TicTacToe
                     switch (sectorsInfo[i, j])
                     {
                         case Cell.X:
-                            sb.Append(symbolX);
+                            sb.Append(SymbolX);
                             break;
                         case Cell.O:
-                            sb.Append(symbolO);
+                            sb.Append(SymbolO);
                             break;
                         case Cell.Free:
-                            sb.Append(symbolFree);
+                            sb.Append(SymbolFree);
                             break;
                         case Cell.Draw:
-                            sb.Append(symbolDraw);
+                            sb.Append(SymbolDraw);
                             break;
                     }
                     sb.Append("║");
@@ -94,7 +129,7 @@ namespace Dymova.DotNetCourse.TicTacToe
 
         }
 
-        public static void GetNextStep(out int x, out int y, Player currentPlayer)
+        public static void GetNextStep(out int x, out int y)
         {
             while (true)
             {
@@ -155,5 +190,7 @@ namespace Dymova.DotNetCourse.TicTacToe
 
             }
         }
+
+
     }
 }

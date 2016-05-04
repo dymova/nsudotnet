@@ -42,7 +42,8 @@
   <ItemGroup>
     <Compile Include="Cell.cs" />
     <Compile Include="ConsoleInterface.cs" />
-    <Compile Include="Controller.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="IUserInterface.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

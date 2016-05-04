@@ -2,7 +2,7 @@
 
 namespace Dymova.DotNetCourse.TicTacToe
 {
-    public class Controller
+    public class Game
     {
         private static readonly int[][,] WinConditions =
         {
@@ -22,67 +22,58 @@ namespace Dymova.DotNetCourse.TicTacToe
         };
 
         private Player _currentPlayer;
-        private Cell _fieldStatus = Cell.Free;
         private int _prevX;
         private int _prevY;
-        private readonly Cell[,] _sectorsInfo;
+        private Cell _fieldStatus;
+        public Cell FieldStatus
+        {
+            get { return _fieldStatus; }
+        }
+        public Cell[,] SectorsInfo { get; private set;}
+        public Cell[,] Field { get; private set; }
         private int _stepCount;
 
-        public Controller()
+        public Game()
         {
-            var _stepCount = 0;
+            _stepCount = 0;
+            _fieldStatus = Cell.Free;
             Field = new Cell[9, 9];
 
-            _sectorsInfo = new Cell[3, 3];
-        }
-
-        public Cell[,] Field { get; private set; }
-
-        public void Run()
-        {
-            ConsoleInterface.DisplayField(Field, _sectorsInfo);
-
-            int x;
-            int y;
+            SectorsInfo = new Cell[3, 3];
 
             var random = new Random();
-
             _currentPlayer = random.Next(1) == 0 ? Player.O : Player.X;
+        }
 
-            while (_fieldStatus == Cell.Free)
+        public void MakeMove(int x, int y)
+        {
+            if (IsSuitable(x, y))
             {
-                ConsoleInterface.GetNextStep(out x, out y, _currentPlayer);
-                if (IsSuitable(x, y))
-                {
-                    Field[x, y] = _currentPlayer == Player.X ? Cell.X : Cell.O;
-                    UpdateSectorInfo(x, y);
-                    CheckField();
-                    ConsoleInterface.DisplayField(Field, _sectorsInfo);
-                    _prevX = x;
-                    _prevY = y;
-                    _stepCount++;
-                    _currentPlayer = _currentPlayer == Player.X ? Player.O : Player.X;
-                }
-                else
-                {
-                    ConsoleInterface.DisplayError("you shouldn't choose this cell");
-                }
+                Field[x, y] = _currentPlayer == Player.X ? Cell.X : Cell.O;
+                UpdateSectorInfo(x, y);
+                CheckField();
+                _prevX = x;
+                _prevY = y;
+                _stepCount++;
+                _currentPlayer = _currentPlayer == Player.X ? Player.O : Player.X;
             }
-
-            ConsoleInterface.DisplayResult(_fieldStatus);
+            else
+            {
+                throw new GameException("you shouldn't choose this cell");
+            }
         }
 
         private void CheckField()
         {
             foreach (var condition in WinConditions)
             {
-                if (ConditionIsTrue(_sectorsInfo, condition, 0, 0, ref _fieldStatus))
+                if (ConditionIsTrue(SectorsInfo, condition, 0, 0, ref _fieldStatus))
                 {
                     return;
                 }
             }
 
-            if (IsFilled(0, 0, _sectorsInfo))
+            if (IsFilled(0, 0, SectorsInfo))
             {
                 _fieldStatus = Cell.Draw;
             }
@@ -93,13 +84,13 @@ namespace Dymova.DotNetCourse.TicTacToe
         {
             var startSectorX = x/3*3;
             var startSectorY = y/3*3;
-            var sectorStatus = _sectorsInfo[x/3, y/3];
+            var sectorStatus = SectorsInfo[x/3, y/3];
 
             foreach (var condition in WinConditions)
             {
                 if (ConditionIsTrue(Field, condition, startSectorX, startSectorY, ref sectorStatus))
                 {
-                    _sectorsInfo[x / 3, y / 3] = sectorStatus;
+                    SectorsInfo[x / 3, y / 3] = sectorStatus;
                     return;
                 }
             }
@@ -166,6 +157,14 @@ namespace Dymova.DotNetCourse.TicTacToe
                 }
             }
             return true;
+        }
+
+        public class GameException : Exception
+        {
+            public GameException(string message)
+                : base(message)
+            {
+            }
         }
     }
 }

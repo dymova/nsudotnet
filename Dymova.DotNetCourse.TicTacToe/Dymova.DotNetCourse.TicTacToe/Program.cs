@@ -7,8 +7,10 @@ namespace Dymova.DotNetCourse.TicTacToe
   {
     static void Main(string[] args)
     {
-        Controller controller = new Controller();
-        controller.Run();
+        Game game = new Game();
+        IUserInterface userInterface = new ConsoleInterface(game);
+        userInterface.Run();
+
         Console.ReadKey();
     }
   }
