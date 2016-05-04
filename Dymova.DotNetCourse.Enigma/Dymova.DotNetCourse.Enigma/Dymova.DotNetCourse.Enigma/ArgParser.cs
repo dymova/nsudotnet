@@ -24,7 +24,7 @@ namespace Dymova.DotNetCourse.Enigma
                     }
                     if (!File.Exists(args[1]))
                     {
-                        throw new ArgParserException("File '" + args[1] + "doesn't exist.");
+                        throw new ArgParserException("File '" + args[1] + " doesn't exist.");
                     }
                     break;
                 case DecryptCommand:
@@ -34,7 +34,7 @@ namespace Dymova.DotNetCourse.Enigma
                     }
                     if (!File.Exists(args[1]))
                     {
-                        throw new ArgParserException("Binfile '" + args[1] + "doesn't exist.");
+                        throw new ArgParserException("Binfile '" + args[1] + " doesn't exist.");
                     }
 
                     break;

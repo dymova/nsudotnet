@@ -4,7 +4,7 @@ namespace Dymova.DotNetCourse.Enigma
 {
     public class Сryptographer
     {
-        protected SymmetricAlgorithm getSymmetricAlgorithm(string algName)
+        protected SymmetricAlgorithm GetSymmetricAlgorithm(string algName)
         {
             switch (algName)
             {

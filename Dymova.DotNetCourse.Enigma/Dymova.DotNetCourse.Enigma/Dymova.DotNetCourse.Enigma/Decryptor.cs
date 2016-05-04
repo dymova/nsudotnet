@@ -22,7 +22,7 @@ namespace Dymova.DotNetCourse.Enigma
 
         public void Decrypt()
         {
-            using (_algorithm = getSymmetricAlgorithm(_algName))
+            using (_algorithm = GetSymmetricAlgorithm(_algName))
             {
                 ReadKeyAndIv();
                 var decryptor = _algorithm.CreateDecryptor();

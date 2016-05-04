@@ -20,7 +20,7 @@ namespace Dymova.DotNetCourse.Enigma
 
         public void Encrypt()
         {
-           using (_algorithm = getSymmetricAlgorithm(_algName))
+           using (_algorithm = GetSymmetricAlgorithm(_algName))
             {
                 _algorithm.GenerateKey();
                 _algorithm.GenerateIV();
